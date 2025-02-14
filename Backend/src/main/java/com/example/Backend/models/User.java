@@ -10,6 +10,7 @@ public class User extends AbstractClass {
     private String username;
     private String email;
     private String password;
+    private Boolean isActive;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
@@ -21,12 +22,13 @@ public class User extends AbstractClass {
 
     public User(){}
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, Boolean isActive) {
         
         this.username = username;
         this.email = email;
         this.password = encoder.encode(password);
         this.userProfile = new UserProfile();
+        this.isActive = isActive;
     }
 
     public User(Long senderId) {
@@ -62,5 +64,13 @@ public class User extends AbstractClass {
 
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

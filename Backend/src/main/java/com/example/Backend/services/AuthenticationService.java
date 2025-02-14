@@ -42,7 +42,7 @@ public class AuthenticationService {
         session.setAttribute(userSessionKey, user.getId());
     }
 
-    public boolean loginUser(String typedLoginMethod, String typedPassword, HttpSession session){
+    public boolean loginUser(String typedLoginMethod, String typedPassword, HttpSession session, Boolean active){
         Optional<User> attemptedUser;
         if(typedLoginMethod.contains("@")) {
             attemptedUser = userService.getUserByEmail(typedLoginMethod);
@@ -53,7 +53,7 @@ public class AuthenticationService {
             return false;
         }
         User attemptedUserPassCheck = attemptedUser.get();
-        if(!attemptedUserPassCheck.checkMatchingPasswords(typedPassword)){
+        if(!attemptedUserPassCheck.getActive() || !attemptedUserPassCheck.checkMatchingPasswords(typedPassword)){
             return false;
         }
         setUserInSession(session, attemptedUserPassCheck);

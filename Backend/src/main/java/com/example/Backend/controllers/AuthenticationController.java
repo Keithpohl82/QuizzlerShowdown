@@ -27,7 +27,8 @@ public class AuthenticationController {
     public ResponseEntity<String> attemptLogin(@RequestBody LoginFormDTO request, HttpSession session){
         String typedLoginMethod = request.getUsername();
         String typedPassword = request.getPassword();
-        if(authenticationService.loginUser(typedLoginMethod, typedPassword, session)){
+        Boolean active = request.getActive();
+        if(authenticationService.loginUser(typedLoginMethod, typedPassword, session, active)){
             return ResponseEntity.ok("Sucessfully logged in");
         }
         return ResponseEntity.status(401).body("Incorrect username/email or password");
@@ -38,7 +39,7 @@ public class AuthenticationController {
         if(request.getUsername().contains("@")) {
             return ResponseEntity.status(401).body("Username cannot contain @");
         }
-        User newUser = new User(request.getUsername(), request.getEmail(), request.getPassword());
+        User newUser = new User(request.getUsername(), request.getEmail(), request.getPassword(), true);
         String passwordCheck = request.getPasswordVerification();
         if(!authenticationService.checkUsername(newUser)){
             return ResponseEntity.status(401).body("Username already in use");

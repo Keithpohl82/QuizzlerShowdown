@@ -56,7 +56,7 @@ public class UserController {
     public ResponseEntity<UserInfoDTO> attemptFindUser(@RequestParam String username){
         UserInfoDTO userInfo = new UserInfoDTO();
         Optional <User> tryFindUser = userService.getUserByUsername(username);
-        if(tryFindUser.isEmpty()){
+        if(tryFindUser.isEmpty() || !tryFindUser.get().getActive()){
             return ResponseEntity.status(401).body(userInfo);
         }
         User foundUser = tryFindUser.get();
@@ -111,11 +111,12 @@ public class UserController {
     @PostMapping("/deleteAccount")
     public ResponseEntity<String> attemptDeletion(HttpSession session){
         User deletedUser = authenticationService.getUserFromSession(session);
-        long id = deletedUser.getId();
-        chatService.clearMessages(id);
-        chatService.clearChats(id);
-        friendListService.clearFriends(id);
-        userService.deleteUser(deletedUser);
+        deletedUser.setActive(false);
+//        long id = deletedUser.getId();
+//        chatService.clearMessages(id);
+//        chatService.clearChats(id);
+//        friendListService.clearFriends(id);
+//        userService.deleteUser(deletedUser);
         session.invalidate();
         return ResponseEntity.ok("Account deleted");
     }

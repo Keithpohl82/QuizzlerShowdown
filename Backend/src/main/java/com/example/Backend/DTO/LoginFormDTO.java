@@ -18,6 +18,8 @@ public class LoginFormDTO {
     @Email
     private String email;
 
+    private Boolean isActive;
+
     public LoginFormDTO() {}
 
     public String getUsername() {return username;}
@@ -28,4 +30,12 @@ public class LoginFormDTO {
 
     public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
 }
